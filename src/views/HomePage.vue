@@ -1,56 +1,178 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header>
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>Lista de Productos</ion-title>
       </ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button @click="nuevoProducto = true">
+          <ion-icon name="add"></ion-icon> Agregar Producto
+        </ion-button>
+      </ion-buttons>
     </ion-header>
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+    <ion-content>
+      <ion-row class="d-flex align-center justify-center">
+        <ion-col v-for="producto in products" :key="producto.id" size-md="3">
+          <ion-card class="mx-auto align-center" max-width="250" style="border: 5px solid #65233d" elevation="10">
+            <ion-img :src="producto.imagenArchivo" height="200px" />
+            <ion-card-header class="font-weight-bold">
+              <ion-card-title>{{ producto.nombre }}</ion-card-title>
+            </ion-card-header>
+            <hr />
+            <ion-card-content>
+              <ion-card-subtitle>
+                <ion-card-text class="font-weight-bold">ID: {{ producto.id }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold">Categoría: {{ producto.categoria }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold">Resumen: {{ producto.resumen }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold">Descripción: {{ producto.descripcion }}</ion-card-text> <br />
+                <!--<ion-card-text class="font-weight-bold">Imagen: {{ producto.imagenArchivo }}</ion-card-text> <br />-->
+                <ion-card-text class="font-weight-bold">Precio: ${{ producto.precio.toFixed(2) }}</ion-card-text>
+              </ion-card-subtitle>
+            </ion-card-content>
+            <ion-row class="mx-auto text-center my-4">
+              <ion-col>
+                <!-- Botón de eliminar -->
+                <ion-button block color="danger" fill="outline" @click="eliminarProducto(producto.id)">
+                  <ion-icon slot="start" name="trash-outline"></ion-icon>Eliminar
+                </ion-button>
+              </ion-col>
+              <ion-col>
+                <!-- Botón de actualizar -->
+                <ion-button block color="warning" fill="outline" @click="abrirDialogo(producto)">
+                  <ion-icon slot="start" name="create-outline"></ion-icon>Actualizar
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <!-- Componente del formulario de guardar producto -->
+      <GuardarProductoModal v-bind:nuevoProducto="nuevoProducto" formTitle="Nuevo Producto" />
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script>
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonCard, IonImg, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, IonFab, IonFabButton, IonItem, IonLabel, IonInput, IonAlert } from '@ionic/vue';
+import { defineComponent } from 'vue';
+import Swal from 'sweetalert2';
+import GuardarProductoModal from "@/components/NuevoProducto.vue";
+
+export default defineComponent({
+  components: {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonImg,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonFab,
+    IonFabButton,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonAlert,
+    GuardarProductoModal
+
+  },
+  data() {
+    return {
+      products: [],
+      imagen: 'https://img.freepik.com/vector-premium/dibujos-animados-productos-supermercado_24640-55628.jpg',
+      nuevoProducto: false,
+      formTitle: '',
+      nombre: '',
+      categoria: '',
+      resumen: '',
+      descripcion: '',
+      imagenArchivo: '',
+      precio: '',
+    };
+  },
+  created() {
+    this.mostrarProductos();
+  },
+  methods: {
+    async mostrarProductos() {
+      try {
+        const response = await fetch('https://localhost:44384/api/v1/Catalog');
+        if (!response.ok) {
+          throw new Error('Error al obtener los productos');
+        }
+        const data = await response.json();
+        this.products = data;
+      } catch (error) {
+        Swal.fire({
+          title: '¡Error!',
+          text: 'No se pudo obtener los productos, Inténtalo de nuevo',
+          icon: 'error',
+          confirmButtonClass: 'btn-error',
+        });
+      }
+    },
+    async eliminarProducto(id) {
+      try {
+        const response = await fetch(`https://localhost:44384/api/v1/Catalog/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar el producto');
+        }
+
+        this.mostrarProductos();
+
+        Swal.fire({
+          title: '¡Producto eliminado!',
+          text: 'El producto se eliminó exitosamente',
+          icon: 'success',
+          confirmButtonClass: 'btn-success',
+        });
+      } catch (error) {
+        Swal.fire({
+          title: '¡Error!',
+          text: 'No se pudo eliminar el producto, Inténtalo de nuevo',
+          icon: 'error',
+          confirmButtonClass: 'btn-error',
+        });
+      }
+    },
+  },
+});
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.btn-success {
+  background-color: #4caf50 !important;
+  color: #fff;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.btn-error {
+  background-color: #f44336 !important;
+  color: #fff;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
+ion-fab-button::part(native) {
+  background-color: #146b63;
+  border-radius: 15px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  color: black;
 }
 
-#container a {
-  text-decoration: none;
+ion-fab-button::part(native):hover::after {
+  background-color: #a3e681;
+}
+
+ion-fab-button::part(native):active::after {
+  background-color: #87d361;
 }
 </style>
