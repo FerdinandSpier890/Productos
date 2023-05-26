@@ -115,7 +115,7 @@ export default defineComponent({
                 // Asignar el valor convertido al formulario
                 this.productoSeleccionado.precio = precioConvertido;
 
-                const response = await fetch(`https://localhost:44384/api/v1/Catalog/${this.productoSeleccionado.id}`, {
+                const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/${this.productoSeleccionado.id}`, {
                     method: "PUT",
                     headers: {
                         'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default defineComponent({
                 if (response.ok) {
                     //this.products = this.products.filter((producto) => producto.id !== id);
                     swal("Actualización Exitosa", "El Producto Se Actualizó Correctamente", "success");
-                    //location.reload();
+                    location.reload();
                     // Actualizar la lista de productos después de actualizar
                     this.$emit('update:editarProductoModal', false);
                     this.$emit('dismiss');

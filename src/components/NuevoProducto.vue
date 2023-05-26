@@ -15,6 +15,9 @@
             <ion-card>
                 <ion-card-content>
                     <ion-item>
+                        <ion-img :src="imagenArchivo" height="200px" />
+                    </ion-item>
+                    <ion-item>
                         <ion-label position="floating">Nombre del Producto</ion-label>
                         <ion-input v-model="nombre" required></ion-input>
                     </ion-item>
@@ -135,7 +138,7 @@ export default defineComponent({
                 };
 
                 try {
-                    const response = await fetch("https://localhost:44384/api/v1/Catalog", {
+                    const response = await fetch("http://192.168.0.2:550/api/v1/Catalog/", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -146,10 +149,11 @@ export default defineComponent({
                     if (response.ok) {
                         swal("Registro Exitoso", "El Producto Se Registró Correctamente", "success");
                         this.cerrarFormulario();
+                        location.reload();
                         this.$emit('actualizarProductos');
                         this.$emit('dismiss'); // Emitir evento 'dismiss' después de cerrar el formulario
                         this.mostrarProductos(); // Actualizar la lista de productos
-                        location.reload();
+                        //location.reload();
                     } else {
                         swal("Error", "No Se Puede Guardar El Producto", "error");
                     }
@@ -181,7 +185,7 @@ export default defineComponent({
         },
         async mostrarProductos() {
             try {
-                const response = await fetch('https://localhost:44384/api/v1/Catalog');
+                const response = await fetch('http://192.168.0.2:550/api/v1/Catalog');
                 if (!response.ok) {
                     swal("Error", "No Se Puede Mostrar Los Productos", "error")
                 }
@@ -228,4 +232,6 @@ export default defineComponent({
     }
 });
 </script>
-  
+<style scoped>
+
+</style>

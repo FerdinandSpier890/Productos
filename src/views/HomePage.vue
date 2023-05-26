@@ -12,15 +12,15 @@
     </ion-header>
 
     <ion-content>
-      <ion-row class="d-flex align-center justify-center">
-        <ion-col cols="12" md="6">
+      <ion-row class="d-flex align-center justify-center animated-row fade-in">
+        <ion-col cols="12" md="6" class="animated-column fade-in">
           <ion-item>
             <ion-label position="floating">Buscar por ID</ion-label>
             <ion-input v-model="searchById" @input="buscarProductoId"></ion-input>
             <ion-icon slot="start" :icon="searchIcon"></ion-icon>
           </ion-item>
         </ion-col>
-        <ion-col cols="12" md="6">
+        <ion-col cols="12" md="6" class="animated-column fade-in">
           <ion-item>
             <ion-label position="floating">Buscar por Categoría</ion-label>
             <ion-input v-model="searchByCategory" @input="buscarProductoCategoria"></ion-input>
@@ -30,9 +30,10 @@
       </ion-row>
       <ion-row class="d-flex align-center justify-center">
         <ion-col v-for="producto in products" :key="producto.id" size-md="3">
-          <ion-card class="mx-auto align-center" max-width="250" style="border: 5px solid #65233d" elevation="10">
+          <ion-card :id="'card-' + producto.id" class="animated-card fade-in mx-auto align-center hover-elevate"
+            max-width="250" style="border: 5px solid #b46474" elevation="10">
             <ion-img :src="producto.imagenArchivo" height="200px" />
-            <ion-card-header class="font-weight-bold">
+            <ion-card-header class="font-weight-bold typewriter-effect">
               <ion-card-title>{{ producto.nombre }}</ion-card-title>
             </ion-card-header>
             <hr />
@@ -57,7 +58,6 @@
                 <ion-button block color="warning" fill="outline" @click="abrirModal(producto)">
                   <ion-icon slot="start" name="create-outline"></ion-icon>Actualizar
                 </ion-button>
-
               </ion-col>
             </ion-row>
           </ion-card>
@@ -65,7 +65,7 @@
       </ion-row>
       <!-- Componente del formulario de guardar producto -->
       <GuardarProductoModal v-bind:nuevoProducto="nuevoProducto" formTitle="Nuevo Producto" @dismiss="resetModal"
-      @actualizarProductos="obtenerProductos" />
+        @actualizarProductos="obtenerProductos" />
 
       <EditarProductoModal :productoSeleccionado="productoSeleccionado" :editarProductoModal="mostrarModalEdicion"
         @dismiss="resetModal" :is-open="mostrarModalEdicion" />
@@ -155,15 +155,15 @@ export default defineComponent({
     },
     async mostrarProductos() {
       try {
-        const response = await fetch('https://localhost:44384/api/v1/Catalog');
+        const response = await fetch('http://192.168.0.2:550/api/v1/Catalog');
         if (!response.ok) {
-          this.mostrarToast('No Se Pudo Mostrar Los Productos', 'error');
+          swal("Error", "No Se Puede Obtener los Productos", "error")
         }
         const data = await response.json();
         this.products = data;
         this.$refs.guardarProductoModal.mostrarProductos(); // Llamar al método mostrarProductos() en el componente hijo
       } catch (error) {
-        this.mostrarToast('No Se Pudo Obtener Los Productos', 'error');
+        swal("Error", error, "error")
       }
     },
     mostrarToast(mensaje, color) {
@@ -176,7 +176,7 @@ export default defineComponent({
     },
     async eliminarProducto(id) {
       try {
-        const response = await fetch(`https://localhost:44384/api/v1/Catalog/${id}`, {
+        const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/${id}`, {
           method: 'DELETE',
         });
 
@@ -184,7 +184,11 @@ export default defineComponent({
           swal("Error", "No Se Puede Eliminar El Producto", "error")
         }
         swal("Producto Eliminado", "El Producto Se Elimino Correctamente", "success")
-        this.mostrarProductos();
+        const card = document.getElementById(`card-${id}`);
+        card.classList.add('animated-card-destroy'); // Agrega la clase para la animación de destrucción
+        setTimeout(() => {
+          this.mostrarProductos();
+        }, 500);
       } catch (error) {
         swal("Error", error, "error")
       }
@@ -226,7 +230,7 @@ export default defineComponent({
         this.mostrarProductos();
       } else {
         try {
-          const response = await fetch(`https://localhost:44384/api/v1/Catalog/${this.searchById}`);
+          const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/${this.searchById}`);
           if (!response.ok) {
             return;
           }
@@ -242,7 +246,7 @@ export default defineComponent({
         this.mostrarProductos();
       } else {
         try {
-          const response = await fetch(`https://localhost:44384/api/v1/Catalog/GetProductByCategory/${this.searchByCategory}`);
+          const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/GetProductByCategory/${this.searchByCategory}`);
           if (!response.ok) {
             return;
           }
@@ -262,42 +266,123 @@ export default defineComponent({
       this.productoSeleccionado.descripcion = producto.descripcion;
       this.productoSeleccionado.resumen = producto.resumen;
       this.productoSeleccionado.imagenArchivo = producto.imagenArchivo;
-      this.productoSeleccionado.precio = precioConvertido
-
+      this.productoSeleccionado.precio = precioConvertido.toFixed(2);
     },
-    obtenerProductos() {
-      console.log('Método "mostrarProductos" ejecutado');
-      // Lógica para obtener la lista actualizada de productos
-      this.products = mostrarProductos(); // Asegúrate de que esta función obtenga los productos actualizados correctamente
-    }
-
+    // Agrega el método de restablecerModal() para restablecer las variables de edición del producto
+    restablecerModal() {
+      this.mostrarModalEdicion = false;
+      this.productoSeleccionado.id = '';
+      this.productoSeleccionado.nombre = '';
+      this.productoSeleccionado.categoria = '';
+      this.productoSeleccionado.descripcion = '';
+      this.productoSeleccionado.resumen = '';
+      this.productoSeleccionado.imagenArchivo = '';
+      this.productoSeleccionado.precio = '';
+    },
+  },
+  computed: {
+    searchIcon() {
+      return this.searchByCategory || this.searchById ? 'close-circle' : 'search';
+    },
   },
 });
 </script>
 
 <style scoped>
-.btn-success {
-  background-color: #4caf50 !important;
-  color: #fff;
+.animated-card {
+  animation: fade-in 0.5s ease-in-out;
 }
 
-.btn-error {
-  background-color: #f44336 !important;
-  color: #fff;
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-ion-fab-button::part(native) {
-  background-color: #146b63;
-  border-radius: 15px;
-  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-  color: black;
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
 }
 
-ion-fab-button::part(native):hover::after {
-  background-color: #a3e681;
+.hover-scale:hover {
+  transform: scale(1.05);
 }
 
-ion-fab-button::part(native):active::after {
-  background-color: #87d361;
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 0;
+  border-top: 1px solid #65233d;
 }
-</style>
+
+.hover-elevate {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-elevate:hover {
+  transform: translateY(-10px);
+}
+
+
+.animated-row {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+.animated-column {
+  animation: fade-in 0.5s ease-in-out;
+  animation-delay: 0.2s;
+  /* Agrega un retraso de animación para los elementos de columna */
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animated-card-destroy {
+  animation: destroy-card 0.5s ease-in-out;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+@keyframes destroy-card {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.typewriter-effect {
+  overflow: hidden;
+  /* Oculta el contenido que se va a escribir */
+  white-space: nowrap;
+  /* Evita que el texto se divida en múltiples líneas */
+  animation: typing 3s steps(30) infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}</style>
