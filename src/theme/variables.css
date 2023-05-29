@@ -225,12 +225,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
 
-    --ion-item-background: #1e1e1e;
+    --ion-item-background: #6f9e4a;
 
-    --ion-toolbar-background: #1f1f1f;
+    --ion-toolbar-background: #6f9e4a;
 
-    --ion-tab-bar-background: #1f1f1f;
+    --ion-tab-bar-background: #6f9e4a;
 
-    --ion-card-background: #1e1e1e;
+    --ion-card-background: #664732;
   }
 }

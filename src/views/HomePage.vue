@@ -1,65 +1,85 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar>
-        <ion-title>Lista de Productos</ion-title>
+      <ion-toolbar style="background-color: #6f9e4a;">
+        <ion-title style="font-family: 'Minecraft', sans-serif;">Lista de Productos</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="nuevoProducto = true">
+          <ion-button style="font-family: 'Minecraft', sans-serif;" @click="nuevoProducto = true">
             <ion-icon name="add"></ion-icon> Agregar Producto
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-
-    <ion-content>
+    <ion-content
+      style="background-image: url('https://addons-media.operacdn.com/media/CACHE/images/themes/95/72895/1.0-rev1/images/93ccab91-6074-4c33-8e46-e595084a0d4e/0dfd2182106b1095cc52bd11ba596698.jpg');">
       <ion-row class="d-flex align-center justify-center animated-row fade-in">
         <ion-col cols="12" md="6" class="animated-column fade-in">
           <ion-item>
-            <ion-label position="floating">Buscar por ID</ion-label>
-            <ion-input v-model="searchById" @input="buscarProductoId"></ion-input>
-            <ion-icon slot="start" :icon="searchIcon"></ion-icon>
+            <ion-label position="floating" style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Buscar por ID</ion-label>
+            <ion-input v-model="searchById" @input="buscarProductoId"
+              style="font-family: 'Minecraft', sans-serif;"></ion-input>
+            <ion-icon slot="start" :icon="searchIcon" style="color: #6f9e4a;"></ion-icon>
           </ion-item>
         </ion-col>
         <ion-col cols="12" md="6" class="animated-column fade-in">
           <ion-item>
-            <ion-label position="floating">Buscar por Categoría</ion-label>
-            <ion-input v-model="searchByCategory" @input="buscarProductoCategoria"></ion-input>
-            <ion-icon slot="start" :icon="searchIcon"></ion-icon>
+            <ion-label position="floating" style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Buscar por Categoría</ion-label>
+            <ion-input v-model="searchByCategory" @input="buscarProductoCategoria"
+              style="font-family: 'Minecraft', sans-serif;"></ion-input>
+            <ion-icon slot="start" :icon="searchIcon" style="color: #6f9e4a;"></ion-icon>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row class="d-flex align-center justify-center">
         <ion-col v-for="producto in products" :key="producto.id" size-md="3">
-          <ion-card :id="'card-' + producto.id" class="animated-card fade-in mx-auto align-center hover-elevate"
-            max-width="250" style="border: 5px solid #b46474" elevation="10">
-            <ion-img :src="producto.imagenArchivo" height="200px" />
-            <ion-card-header class="font-weight-bold typewriter-effect">
-              <ion-card-title>{{ producto.nombre }}</ion-card-title>
+          <ion-card :id="'card-' + producto.id" class="animated-card fade-in mx-auto align-center" max-width="auto"
+            style="border: 5px solid #6f9e4a; border-radius: 10px; background-color: #6f9e4a; color: #FF0000"
+            elevation="10">
+            <ion-img :src="producto.imagenArchivo" height="200px" style="border-radius: 10px;" />
+            <ion-card-header class="font-weight-bold typewriter-effect"
+              style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">
+              <ion-card-title style="color: #FFFFFF">{{ producto.nombre }}</ion-card-title>
             </ion-card-header>
-            <hr />
+            <hr style="border-color: #3a5b85;" />
             <ion-card-content>
               <ion-card-subtitle>
-                <ion-card-text class="font-weight-bold">ID: {{ producto.id }}</ion-card-text> <br />
-                <ion-card-text class="font-weight-bold">Categoría: {{ producto.categoria }}</ion-card-text> <br />
-                <ion-card-text class="font-weight-bold">Resumen: {{ producto.resumen }}</ion-card-text> <br />
-                <ion-card-text class="font-weight-bold">Descripción: {{ producto.descripcion }}</ion-card-text> <br />
-                <ion-card-text class="font-weight-bold">Precio: ${{ producto.precio.toFixed(2) }}</ion-card-text>
+                <ion-card-text class="font-weight-bold"
+                  style="font-family: 'Minecraft', sans-serif; color: #FFFFFF; font-size: 18px;">ID:
+                  {{ producto.id
+                  }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold"
+                  style="font-family: 'Minecraft', sans-serif; color: #FFFFFF; font-size: 18px;">Nombre del Producto: {{
+                    producto.nombre }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold"
+                  style="font-family: 'Minecraft', sans-serif; color: #FFFFFF; font-size: 18px;">Categoría del Producto:
+                  {{
+                    producto.categoria }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold"
+                  style="font-family: 'Minecraft', sans-serif; color: #FFFFFF; font-size: 18px;">Resumen del Producto: {{
+                    producto.resumen }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold"
+                  style="font-family: 'Minecraft', sans-serif; color: #FFFFFF; font-size: 18px;">Descripción del Producto:
+                  {{
+                    producto.descripcion }}</ion-card-text> <br />
+                <ion-card-text class="font-weight-bold"
+                  style="font-family: 'Minecraft', sans-serif; color: #FFFFFF; font-size: 18px;">Precio del Producto: ${{
+                    producto.precio.toFixed(2) }}</ion-card-text>
               </ion-card-subtitle>
+              <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col>
+                  <ion-button expand="full" color="success" @click="abrirModal(producto)"
+                    style="font-family: 'Minecraft', sans-serif;">
+                    Editar
+                  </ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button expand="full" color="danger" @click="confirmarEliminacion(producto.id)"
+                    style="font-family: 'Minecraft', sans-serif;">
+                    Eliminar
+                  </ion-button>
+                </ion-col>
+              </ion-row>
             </ion-card-content>
-            <ion-row class="mx-auto text-center my-4">
-              <ion-col>
-                <!-- Botón de eliminar -->
-                <ion-button block color="danger" fill="outline" @click="confirmarEliminacion(producto.id)">
-                  <ion-icon slot="start" name="trash-outline"></ion-icon>Eliminar
-                </ion-button>
-              </ion-col>
-              <ion-col>
-                <!-- Botón de actualizar -->
-                <ion-button block color="warning" fill="outline" @click="abrirModal(producto)">
-                  <ion-icon slot="start" name="create-outline"></ion-icon>Actualizar
-                </ion-button>
-              </ion-col>
-            </ion-row>
           </ion-card>
         </ion-col>
       </ion-row>
@@ -69,9 +89,6 @@
 
       <EditarProductoModal :productoSeleccionado="productoSeleccionado" :editarProductoModal="mostrarModalEdicion"
         @dismiss="resetModal" :is-open="mostrarModalEdicion" />
-
-      <ion-toast :is-open="showToast" :message="toastMessage" :color="toastColor" position="bottom"
-        :duration="3000"></ion-toast>
     </ion-content>
   </ion-page>
 </template>
@@ -139,6 +156,7 @@ export default defineComponent({
   },
   created() {
     this.mostrarProductos();
+    //this.musicaFondo();
   },
   methods: {
     resetModal() {
@@ -155,40 +173,39 @@ export default defineComponent({
     },
     async mostrarProductos() {
       try {
-        const response = await fetch('http://192.168.0.2:550/api/v1/Catalog');
+        const response = await fetch('https://localhost:44384/api/v1/Catalog');
         if (!response.ok) {
           swal("Error", "No Se Puede Obtener los Productos", "error")
         }
         const data = await response.json();
+        const audio = new Audio('../sounds/xp.mp3');
+        //audio.currentTime = 0;
+        audio.play();
         this.products = data;
         this.$refs.guardarProductoModal.mostrarProductos(); // Llamar al método mostrarProductos() en el componente hijo
       } catch (error) {
         swal("Error", error, "error")
       }
     },
-    mostrarToast(mensaje, color) {
-      this.toastMessage = mensaje;
-      this.toastColor = color;
-      this.showToast = true;
-      setTimeout(() => {
-        this.showToast = false;
-      }, 3000);
-    },
     async eliminarProducto(id) {
       try {
-        const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/${id}`, {
+        const response = await fetch(`https://localhost:44384/api/v1/Catalog/${id}`, {
           method: 'DELETE',
         });
 
         if (!response.ok) {
           swal("Error", "No Se Puede Eliminar El Producto", "error")
         }
+        const audio = new Audio('../sounds/netherenter.mp3');
+        audio.currentTime = 0;
+        audio.play();
         swal("Producto Eliminado", "El Producto Se Elimino Correctamente", "success")
         const card = document.getElementById(`card-${id}`);
-        card.classList.add('animated-card-destroy'); // Agrega la clase para la animación de destrucción
+        card.classList.add('burn-effect');
+
         setTimeout(() => {
           this.mostrarProductos();
-        }, 500);
+        }, 5000);
       } catch (error) {
         swal("Error", error, "error")
       }
@@ -230,7 +247,7 @@ export default defineComponent({
         this.mostrarProductos();
       } else {
         try {
-          const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/${this.searchById}`);
+          const response = await fetch(`https://localhost:44384/api/v1/Catalog/${this.searchById}`);
           if (!response.ok) {
             return;
           }
@@ -246,7 +263,7 @@ export default defineComponent({
         this.mostrarProductos();
       } else {
         try {
-          const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/GetProductByCategory/${this.searchByCategory}`);
+          const response = await fetch(`https://localhost:44384/api/v1/Catalog/GetProductByCategory/${this.searchByCategory}`);
           if (!response.ok) {
             return;
           }
@@ -279,6 +296,10 @@ export default defineComponent({
       this.productoSeleccionado.imagenArchivo = '';
       this.productoSeleccionado.precio = '';
     },
+    musicaFondo() {
+      const audio = new Audio('../sounds/sweden.mp3');
+      audio.play();
+    }
   },
   computed: {
     searchIcon() {
@@ -385,4 +406,86 @@ hr {
   to {
     width: 100%;
   }
+}
+
+.animated-card {
+  position: relative;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.animated-card:hover {
+  animation: star-glow 1s infinite alternate;
+}
+
+@keyframes star-glow {
+  0% {
+    box-shadow: 0 0 100px 0 #6f9e4a;
+  }
+
+  50% {
+    box-shadow: 0 0 200px 0 #6f9e4a;
+  }
+
+  100% {
+    box-shadow: 0 0 100px 0 #6f9e4a;
+  }
+}
+
+@keyframes enlarge-disappear {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3) rotate(360deg);
+  }
+}
+
+.animated-card-remove {
+  animation: enlarge-disappear 1s ease-in-out;
+}
+
+.ion-fab {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes burn-animation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    background-color: #6f9e4a;
+    color: #7833ae;
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+    background-color: #5e1c9e;
+    color: #FFFFFF;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+    background-color: #3f1187;
+    color: #FFFFFF;
+  }
+}
+
+.burn-effect {
+  animation: burn-animation 5s linear forwards;
+  animation-delay: 0.2s;
+  /* Agrega un retraso de animación para que se muestre la animación después de eliminar el producto */
 }</style>

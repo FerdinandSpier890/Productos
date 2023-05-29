@@ -1,7 +1,7 @@
 <template>
     <ion-modal :is-open="nuevoProducto" @dismiss="cerrarFormulario">
         <ion-header>
-            <ion-toolbar>
+            <ion-toolbar style="background-color: #4b662d;">
                 <ion-title>{{ formTitle }}</ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="cerrarFormulario">
@@ -11,7 +11,7 @@
             </ion-toolbar>
         </ion-header>
 
-        <ion-content>
+        <ion-content style="background-color: #664732">
             <ion-card>
                 <ion-card-content>
                     <ion-item>
@@ -43,13 +43,13 @@
                     </ion-item>
                 </ion-card-content>
             </ion-card>
-            <ion-footer>
+            <ion-footer style="background-color: #4b662d;">
                 <ion-toolbar>
                     <ion-buttons slot="start">
-                        <ion-button color="danger" @click="cerrarFormulario">Cancelar</ion-button>
+                        <ion-button color="white" @click="cerrarFormulario" style="font-family: 'Minecraft', sans-serif; background-color: #664732; border-radius: 10px;">Cancelar</ion-button>
                     </ion-buttons>
                     <ion-buttons slot="end">
-                        <ion-button color="primary" @click="guardarProducto">Guardar</ion-button>
+                        <ion-button color="white" @click="guardarProducto" style="font-family: 'Minecraft', sans-serif; background-color: #664732; border-radius: 10px;">Guardar</ion-button>
                     </ion-buttons>
                 </ion-toolbar>
             </ion-footer>
@@ -138,7 +138,7 @@ export default defineComponent({
                 };
 
                 try {
-                    const response = await fetch("http://192.168.0.2:550/api/v1/Catalog/", {
+                    const response = await fetch("https://localhost:44384/api/v1/Catalog/", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -147,12 +147,18 @@ export default defineComponent({
                     });
 
                     if (response.ok) {
+                        //location.reload();
+                        const sound = new Audio('../sounds/xp.mp3');
+                        sound.play();
                         swal("Registro Exitoso", "El Producto Se Registró Correctamente", "success");
+                        setTimeout(() => {
+                            location.reload();
+                        }, 6000);
                         this.cerrarFormulario();
-                        location.reload();
                         this.$emit('actualizarProductos');
                         this.$emit('dismiss'); // Emitir evento 'dismiss' después de cerrar el formulario
                         this.mostrarProductos(); // Actualizar la lista de productos
+                        
                         //location.reload();
                     } else {
                         swal("Error", "No Se Puede Guardar El Producto", "error");
@@ -185,7 +191,7 @@ export default defineComponent({
         },
         async mostrarProductos() {
             try {
-                const response = await fetch('http://192.168.0.2:550/api/v1/Catalog');
+                const response = await fetch('https://localhost:44384/api/v1/Catalog');
                 if (!response.ok) {
                     swal("Error", "No Se Puede Mostrar Los Productos", "error")
                 }
@@ -232,6 +238,67 @@ export default defineComponent({
     }
 });
 </script>
-<style scoped>
 
+<style scoped>
+/* Estilos generales */
+body {
+    background-color: #c4c4c4;
+    /* Cambia el color de fondo aquí */
+}
+
+ion-label,
+ion-input {
+    font-family: 'Minecraft', sans-serif;
+}
+
+/* Estilos específicos del componente */
+.ion-modal {
+    font-family: 'Minecraft', sans-serif;
+}
+
+.ion-header {
+    background-color: #3a5b85;
+    /* Cambia el color del encabezado aquí */
+}
+
+.ion-header ion-title {
+    color: #fff;
+    /* Cambia el color del texto del título aquí */
+}
+
+.ion-content {
+    background-color: #c4c4c4;
+    /* Cambia el color del contenido aquí */
+}
+
+.ion-item {
+    background-color: #fff;
+    /* Cambia el color de los elementos de item aquí */
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.ion-item ion-label {
+    color: #3a5b85;
+    /* Cambia el color del texto de etiqueta aquí */
+}
+
+.ion-item ion-input {
+    color: #3a5b85;
+    /* Cambia el color del texto de entrada aquí */
+}
+
+.ion-footer {
+    background-color: #3a5b85;
+    /* Cambia el color del pie de página aquí */
+}
+
+.ion-footer ion-toolbar {
+    justify-content: space-between;
+}
+
+.ion-footer ion-button {
+    color: #fff;
+    /* Cambia el color del texto del botón aquí */
+}
 </style>
