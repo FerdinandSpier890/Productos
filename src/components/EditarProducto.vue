@@ -1,7 +1,7 @@
 <template>
     <ion-modal :is-open="mostrarModalEdicion" @dismiss="cerrarModal">
         <ion-header>
-            <ion-toolbar style="background-color: #4b662d;">
+            <ion-toolbar style="background-color: #20262E;">
                 <ion-title style="color: #fff;">Editar Producto</ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="cerrarModal">
@@ -10,55 +10,62 @@
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-        <ion-content style="background-color: #664732">
+        <ion-content style="background-color: #20262E">
             <ion-card>
                 <ion-card-content>
                     <ion-item>
                         <ion-img :src="productoSeleccionado.imagenArchivo" height="100" width="100" />
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Nombre</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Nombre</ion-label>
                         <ion-input v-model="productoSeleccionado.nombre" type="text"></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Categoría</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Categoría</ion-label>
                         <ion-input v-model="productoSeleccionado.categoria" type="text"></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Resumen</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Resumen</ion-label>
                         <ion-input v-model="productoSeleccionado.resumen"></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Descripción</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Descripción</ion-label>
                         <ion-input v-model="productoSeleccionado.descripcion"></ion-input>
                     </ion-item>
 
                     <ion-item>
-                        <ion-label position="floating">Imagen</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Imagen</ion-label>
                         <ion-input v-model="productoSeleccionado.imagenArchivo" type="text"></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Precio</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Precio</ion-label>
                         <ion-input v-model="productoSeleccionado.precio" type="number"></ion-input>
                     </ion-item>
                 </ion-card-content>
             </ion-card>
-            <ion-footer style="background-color: #4b662d;">
+            <ion-footer style="background-color: #20262E;">
                 <ion-toolbar>
                     <ion-buttons slot="start">
                         <ion-button color="white" @click="cerrarModal"
-                            style="font-family: 'Minecraft', sans-serif; background-color: #664732; border-radius: 10px;">
-                            Cancelar
+                            style="font-family: 'Minecraft', sans-serif; background-color: #20262E; border-radius: 10px;">
+                            <i class="fas fa-times fa-xl" style="margin-right: 10px;"></i> Cancelar
                         </ion-button>
                     </ion-buttons>
                     <ion-buttons slot="end">
                         <ion-button color="white" @click="guardarCambios"
-                            style="font-family: 'Minecraft', sans-serif; background-color: #664732; border-radius: 10px;">
-                            Guardar
+                            style="font-family: 'Minecraft', sans-serif; background-color: #20262E; border-radius: 10px;">
+                            <i class="fas fa-save fa-xl" style="margin-right: 10px;"></i> Guardar
                         </ion-button>
                     </ion-buttons>
                 </ion-toolbar>
             </ion-footer>
+
         </ion-content>
     </ion-modal>
 </template>
@@ -161,7 +168,7 @@ export default defineComponent({
                     // Asignar el valor convertido al formulario
                     this.productoSeleccionado.precio = precioConvertido;
 
-                    const response = await fetch(`https://localhost:44384/api/v1/Catalog/${this.productoSeleccionado.id}`, {
+                    const response = await fetch(`http://192.168.0.2:550/api/v1/Catalog/${this.productoSeleccionado.id}`, {
                         method: "PUT",
                         headers: {
                             'Content-Type': 'application/json',
@@ -254,5 +261,4 @@ ion-input {
 .ion-footer ion-button {
     color: #fff;
     /* Cambia el color del texto del botón aquí */
-}
-</style>
+}</style>

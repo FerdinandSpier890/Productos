@@ -11,34 +11,41 @@
             </ion-toolbar>
         </ion-header>
 
-        <ion-content style="background-color: #664732">
+        <ion-content style="background-color: #20262E">
             <ion-card>
                 <ion-card-content>
                     <ion-item>
                         <ion-img :src="imagenArchivo" height="200px" />
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Nombre del Producto</ion-label>
+                        <ion-label position="floating" style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Nombre
+                            del Producto</ion-label>
                         <ion-input v-model="nombre" required></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Categoría del Producto</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Categoría del Producto</ion-label>
                         <ion-input v-model="categoria" required></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Resumen del Producto</ion-label>
+                        <ion-label position="floating" style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Resumen
+                            del Producto</ion-label>
                         <ion-input v-model="resumen" required></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Descripción del Producto</ion-label>
+                        <ion-label position="floating"
+                            style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Descripción del
+                            Producto</ion-label>
                         <ion-input v-model="descripcion" required></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Imagen del Producto</ion-label>
+                        <ion-label position="floating" style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Imagen
+                            del Producto</ion-label>
                         <ion-input v-model="imagenArchivo" required></ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">Precio del Producto</ion-label>
+                        <ion-label position="floating" style="font-family: 'Minecraft', sans-serif; color: #FFFFFF">Precio
+                            del Producto</ion-label>
                         <ion-input v-model="precio" required></ion-input>
                     </ion-item>
                 </ion-card-content>
@@ -46,10 +53,16 @@
             <ion-footer style="background-color: #4b662d;">
                 <ion-toolbar>
                     <ion-buttons slot="start">
-                        <ion-button color="white" @click="cerrarFormulario" style="font-family: 'Minecraft', sans-serif; background-color: #664732; border-radius: 10px;">Cancelar</ion-button>
+                        <ion-button color="white" @click="cerrarFormulario"
+                            style="font-family: 'Minecraft', sans-serif; background-color: #20262E; border-radius: 10px;">
+                            <i class="fas fa-times fa-xl" style="margin-right: 10px;"></i> Cancelar
+                        </ion-button>
                     </ion-buttons>
                     <ion-buttons slot="end">
-                        <ion-button color="white" @click="guardarProducto" style="font-family: 'Minecraft', sans-serif; background-color: #664732; border-radius: 10px;">Guardar</ion-button>
+                        <ion-button color="white" @click="guardarProducto"
+                            style="font-family: 'Minecraft', sans-serif; background-color: #20262E; border-radius: 10px;">
+                            <i class="fas fa-save fa-xl" style="margin-right: 10px;"></i> Guardar
+                        </ion-button>
                     </ion-buttons>
                 </ion-toolbar>
             </ion-footer>
@@ -138,7 +151,7 @@ export default defineComponent({
                 };
 
                 try {
-                    const response = await fetch("https://localhost:44384/api/v1/Catalog/", {
+                    const response = await fetch("http://192.168.0.2:550/api/v1/Catalog/", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -158,7 +171,7 @@ export default defineComponent({
                         this.$emit('actualizarProductos');
                         this.$emit('dismiss'); // Emitir evento 'dismiss' después de cerrar el formulario
                         this.mostrarProductos(); // Actualizar la lista de productos
-                        
+
                         //location.reload();
                     } else {
                         swal("Error", "No Se Puede Guardar El Producto", "error");
@@ -191,7 +204,7 @@ export default defineComponent({
         },
         async mostrarProductos() {
             try {
-                const response = await fetch('https://localhost:44384/api/v1/Catalog');
+                const response = await fetch('http://192.168.0.2:550/api/v1/Catalog');
                 if (!response.ok) {
                     swal("Error", "No Se Puede Mostrar Los Productos", "error")
                 }
@@ -300,5 +313,4 @@ ion-input {
 .ion-footer ion-button {
     color: #fff;
     /* Cambia el color del texto del botón aquí */
-}
-</style>
+}</style>
