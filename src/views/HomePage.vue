@@ -1,6 +1,5 @@
 <template>
   <ion-page>
-
     <ion-header>
       <ion-toolbar style="background-color: #060047;">
         <ion-title style="font-family: 'Minecraft', sans-serif;"><i class="fa-duotone fa-basket-shopping-simple"
@@ -10,10 +9,8 @@
             <i class="fas fa-plus fa-lg" style="margin-right: 10px;"></i> Agregar Producto
           </ion-button>
         </ion-buttons>
-
       </ion-toolbar>
     </ion-header>
-
     <ion-content style="background-color: #20262E;">
       <ion-row class="d-flex align-center justify-center animated-row fade-in">
         <ion-col cols="12" md="6" class="animated-column fade-in">
